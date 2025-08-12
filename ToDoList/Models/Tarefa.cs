@@ -6,7 +6,7 @@ namespace ToDoList.Models
     public class Tarefa
     {
         [Key]
-        public int Id { get; set; }
+        public int TarefaID { get; set; }
         
         [Required(ErrorMessage = "O título é obrigatório.")]  // id unico da tarefa
         [StringLength(100, ErrorMessage = "O título não pode ter mais de 100 caracteres.")] //mensagem de erro personalizada
