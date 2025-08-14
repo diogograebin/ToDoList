@@ -15,11 +15,21 @@ namespace ToDoList.Controllers
         }
 
         // Lista e formulário de criação
-
         public async Task<IActionResult> Index()
         {
             var tarefas = await _context.Tarefas.OrderByDescending(t => t.DataCriacao).ToListAsync();
             return View(tarefas);
+        }
+
+        //Criar nova tarefa
+        public async Task<IActionResult> Create(Tarefa tarefa)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(tarefa);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }
