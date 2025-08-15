@@ -22,6 +22,8 @@ namespace ToDoList.Controllers
         }
 
         //Criar nova tarefa
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Tarefa tarefa)
         {
             if (ModelState.IsValid)
@@ -31,5 +33,28 @@ namespace ToDoList.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+
+        //Editar tarefa
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, string titulo, string descricao, bool concluida)
+        {
+            var tarefa = await _context.Tarefas.FindAsync(id);
+            if (tarefa == null)
+            {
+                return NotFound();
+            }
+
+            tarefa.Titulo = titulo;
+            tarefa.Descricao = descricao;
+            tarefa.Concluida = concluida;
+
+            _context.Update(tarefa);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
     }
 }
