@@ -55,6 +55,20 @@ namespace ToDoList.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Excluir tarefa
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Excluir(int id)
+        {
+            var tarefa = await _context.Tarefas.FindAsync(id);
+            if (tarefa != null)
+            {
+                _context.Tarefas.Remove(tarefa);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
 
     }
 }
