@@ -58,7 +58,7 @@ namespace ToDoList.Controllers
         // Excluir tarefa
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Excluir(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var tarefa = await _context.Tarefas.FindAsync(id);
             if (tarefa != null)
