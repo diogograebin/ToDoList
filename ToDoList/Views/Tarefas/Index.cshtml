@@ -1,0 +1,62 @@
+﻿@model IEnumerable<ToDoList.Models.Tarefa>
+
+@{
+    ViewData["Title"] = "To Do List";
+}
+
+<div class="container d-flex flex-column align-items-center mt-5">
+    <h2 class="text-white mb-4">To Do List</h2>
+
+    <!-- Formulário de criação -->
+    <form asp-action="Create" method="post" class="d-flex mb-4 w-50 text-white bg-dark p-2 rounded">
+        <input type="text" name="Titulo" class="form-control me-2 bg-dark text-white border-secondary" placeholder="Digite uma tarefa..." required
+               autocomplete="off" autocorrect="off" spellcheck="false" />
+        <button type="submit" class="btn btn-success">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </form>
+
+    <!-- Lista de tarefas -->
+    <ul class="list-group w-50">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var tarefa in Model)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center bg-dark text-white border-secondary mb-2 rounded">
+
+                    <!-- Exibição da tarefa -->
+                    <span style="@(tarefa.Concluida ? "text-decoration: line-through; color: #4CAF50;" : "")">
+                        @tarefa.Titulo
+                    </span>
+
+                    <div>
+                        <!-- Editar -->
+                        <form asp-action="Edit" method="post" style="display:inline-block">
+                            <input type="hidden" name="id" value="@tarefa.TarefaID" />
+                            <button type="submit" class="btn btn-warning btn-sm me-1">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                        </form>
+
+                        <!-- Concluir -->
+                        @if (!tarefa.Concluida)
+                        {
+                            <form asp-action="Concluir" method="post" style="display:inline-block">
+                                <input type="hidden" name="id" value="@tarefa.TarefaID" />
+                                <button type="submit" class="btn btn-sm" style="background-color:#4CAF50; color:white;">
+                                    <i class="fa-solid fa-check"></i>
+                                </button>
+                            </form>
+                        }
+                    </div>
+                </li>
+            }
+        }
+        else
+        {
+            <li class="list-group-item bg-dark text-center text-white">
+                Nenhuma tarefa cadastrada.
+            </li>
+        }
+    </ul>
+</div>

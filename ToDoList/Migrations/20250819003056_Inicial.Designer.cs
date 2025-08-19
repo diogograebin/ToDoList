@@ -12,7 +12,7 @@ using ToDoList.Data;
 namespace ToDoList.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250812015548_Inicial")]
+    [Migration("20250819003056_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -27,11 +27,11 @@ namespace ToDoList.Migrations
 
             modelBuilder.Entity("ToDoList.Models.Tarefa", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("TarefaID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TarefaID"));
 
                     b.Property<bool>("Concluida")
                         .HasColumnType("bit");
@@ -50,7 +50,7 @@ namespace ToDoList.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("Id");
+                    b.HasKey("TarefaID");
 
                     b.ToTable("Tarefas");
                 });

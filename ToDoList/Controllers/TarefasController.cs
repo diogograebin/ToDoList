@@ -55,17 +55,21 @@ namespace ToDoList.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Excluir tarefa
+        // Concluir tarefa
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Concluir(int id)
         {
             var tarefa = await _context.Tarefas.FindAsync(id);
-            if (tarefa != null)
+
+            if (tarefa == null)
             {
-                _context.Tarefas.Remove(tarefa);
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
+
+            // Marca a tarefa como concluída (remove ela)
+            _context.Remove(tarefa);
+            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 

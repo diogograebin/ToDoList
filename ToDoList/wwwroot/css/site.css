@@ -18,5 +18,21 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    background-color: #1E1E1E !important;
+    color: white !important;
+}
+
+input.form-control {
+    background-color: #212529; 
+    color: white;
+    border: 1px solid #6c757d; 
+}
+
+input.form-control::placeholder {
+    color: #adb5bd; 
+}
+
+
+button.btn-dark {
+    border: none;
 }

@@ -15,7 +15,7 @@ namespace ToDoList.Migrations
                 name: "Tarefas",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    TarefaID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Titulo = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -25,7 +25,7 @@ namespace ToDoList.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tarefas", x => x.Id);
+                    table.PrimaryKey("PK_Tarefas", x => x.TarefaID);
                 });
         }
 
