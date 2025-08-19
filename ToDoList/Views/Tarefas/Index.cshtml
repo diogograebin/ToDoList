@@ -22,21 +22,18 @@
         {
             @foreach (var tarefa in Model)
             {
-                <li class="list-group-item d-flex justify-content-between align-items-center bg-dark text-white border-secondary mb-2 rounded">
+                <li class="list-group-item d-flex justify-content-between align-items-center bg-dark text-white border-secondary mb-2 rounded" data-id="@tarefa.TarefaID">
 
-                    <!-- Exibição da tarefa -->
-                    <span style="@(tarefa.Concluida ? "text-decoration: line-through; color: #4CAF50;" : "")">
+                    <!-- Título da tarefa -->
+                    <span class="tarefa-titulo" style="@(tarefa.Concluida ? "text-decoration: line-through; color: #4CAF50;" : "")">
                         @tarefa.Titulo
                     </span>
 
                     <div>
                         <!-- Editar -->
-                        <form asp-action="Edit" method="post" style="display:inline-block">
-                            <input type="hidden" name="id" value="@tarefa.TarefaID" />
-                            <button type="submit" class="btn btn-warning btn-sm me-1">
-                                <i class="fa-solid fa-pen"></i>
-                            </button>
-                        </form>
+                        <button type="button" class="btn btn-warning btn-sm me-1 btn-edit">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
 
                         <!-- Concluir -->
                         @if (!tarefa.Concluida)
@@ -60,3 +57,76 @@
         }
     </ul>
 </div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.btn-edit').click(function () {
+                const li = $(this).closest('li');
+                const span = li.find('.tarefa-titulo');
+                const tarefaId = li.data('id');
+                const tituloAtual = span.text().trim();
+
+                // Criar input
+                const input = $('<input>', {
+                    type: 'text',
+                    class: 'form-control form-control-sm bg-dark text-white border-secondary me-1',
+                    value: tituloAtual
+                });
+
+                // Substituir span pelo input
+                span.replaceWith(input);
+
+                // Substituir botão de editar pelo de confirmar
+                const salvarBtn = $('<button>', {
+                    type: 'button',
+                    class: 'btn btn-success btn-sm',
+                    html: '<i class="fa-solid fa-check"></i>'
+                });
+                $(this).replaceWith(salvarBtn);
+
+                // Capturar token antiforgery
+                const token = $('input[name="__RequestVerificationToken"]').first().val();
+
+                // Função de salvar
+                salvarBtn.off('click').on('click', function () {
+                    $.ajax({
+                        url: '/Tarefas/Edit',
+                        type: 'POST',
+                        data: {
+                            __RequestVerificationToken: token,
+                            id: tarefaId,
+                            titulo: input.val(),
+                            concluida: li.find('input[name="concluida"]').val() || false
+                        },
+                        success: function () {
+                            // Atualiza span com novo título
+                            const novoSpan = $('<span>', {
+                                class: 'tarefa-titulo',
+                                text: input.val(),
+                                css: { color: '#FFFFFF' }
+                            });
+                            input.replaceWith(novoSpan);
+
+                            // Restaurar botão de editar
+                            const editarBtn = $('<button>', {
+                                type: 'button',
+                                class: 'btn btn-warning btn-sm me-1 btn-edit',
+                                html: '<i class="fa-solid fa-pen"></i>'
+                            });
+                            salvarBtn.replaceWith(editarBtn);
+
+                            // Reatribuir evento
+                            editarBtn.click(arguments.callee);
+                        }
+                    });
+                });
+
+                input.focus();
+            });
+        });
+
+    </script>
+}
